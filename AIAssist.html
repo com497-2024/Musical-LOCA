@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical LOCA - AI Assistant</title>
+    <link rel="stylesheet" href="AIAssist.css">
+</head>
+<body>
+    <header>
+        <h1>Musical LOCA</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">AI Assistant</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>AI Assistant</h2>
+        <div class="options">
+            <div class="option">
+                <h3>Make Beats</h3>
+                <p>Type here to generate beats:</p>
+                <textarea id="beats-input"></textarea>
+                <button onclick="generateBeats()">Generate Beats</button>
+                <div id="beats-output"></div>
+            </div>
+            <div class="option">
+                <h3>Songwriting Help</h3>
+                <p>Type here to get songwriting help:</p>
+                <textarea id="songwriting-input"></textarea>
+                <button onclick="getSongwritingHelp()">Get Help</button>
+                <div id="songwriting-output"></div>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">Back to Home</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Musical LOCA. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
+
