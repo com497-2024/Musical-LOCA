@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical LOCA</title>
+    <!-- Add your stylesheets and other dependencies here -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional CSS for horizontal layout */
+        .event-cards, .post-cards, .artist-cards {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto; /* Enable horizontal scroll if needed */
+            gap: 20px; /* Adjust the spacing between cards */
+        }
+        .event-card, .post-card, .artist-card {
+            width: 300px; /* Set the width of each card */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <h1>Musical LOCA</h1>
+        <!-- Tabs for local music -->
+        <div class="local-music-tabs">
+            <button class="tablink" onclick="openTab('feed')">Feed</button>
+            <!-- Removed the chat tab -->
+            <button class="tablink" onclick="openTab('friends')">Friends</button>
+            <button class="tablink" onclick="openTab('ai-assistant')">AI Assistant</button>
+        </div>
+    </header>
+    <!-- Main content section -->
+    <main>
+        <!-- Upcoming Events Section -->
+        <section id="upcoming-events">
+            <h2>Upcoming Events</h2>
+            <!-- Container for event cards -->
+            <div class="event-cards">
+                <!-- Placeholder event card -->
+                <div class="event-card" onclick="showEventDetails('event1')">
+                    <h3>Event 1</h3>
+                    <p>Date: Pending</p>
+                    <p>Location: Pending</p>
+                </div>
+                <!-- Placeholder event card -->
+                <div class="event-card" onclick="showEventDetails('event2')">
+                    <h3>Event 2</h3>
+                    <p>Date: Pending</p>
+                    <p>Location: Pending</p>
+                </div>
+                <!-- Placeholder event card -->
+                <div class="event-card" onclick="showEventDetails('event3')">
+                    <h3>Event 3</h3>
+                    <p>Date: Pending</p>
+                    <p>Location: Pending</p>
+                </div>
+            </div>
+        </section>
+        <!-- Recent Posts Section -->
+        <section id="recent-posts">
+            <h2>Recent Posts</h2>
+            <!-- Container for post cards -->
+            <div class="post-cards">
+                <!-- Placeholder post card -->
+                <div class="post-card" onclick="showPostDetails('post1')">
+                    <h3>Post Title 1</h3>
+                    <p>Author: Pending</p>
+                    <p>Date: Pending</p>
+                </div>
+                <!-- Placeholder post card -->
+                <div class="post-card" onclick="showPostDetails('post2')">
+                    <h3>Post Title 2</h3>
+                    <p>Author: Pending</p>
+                    <p>Date: Pending</p>
+                </div>
+                <!-- Placeholder post card -->
+                <div class="post-card" onclick="showPostDetails('post3')">
+                    <h3>Post Title 3</h3>
+                    <p>Author: Pending</p>
+                    <p>Date: Pending</p>
+                </div>
+            </div>
+        </section>
+        <!-- Local Artists Section -->
+        <section id="local-artists">
+            <h2>Local Artists</h2>
+            <!-- Container for artist cards -->
+            <div class="artist-cards">
+                <!-- Placeholder artist card -->
+                <div class="artist-card" onclick="showArtistDetails('artist1')">
+                    <h3>Artist Name 1</h3>
+                    <p>Genre: Pending</p>
+                    <p>Social Media: Pending</p>
+                    <p>Music Links: Pending</p>
+                </div>
+                <!-- Placeholder artist card -->
+                <div class="artist-card" onclick="showArtistDetails('artist2')">
+                    <h3>Artist Name 2</h3>
+                    <p>Genre: Pending</p>
+                    <p>Social Media: Pending</p>
+                    <p>Music Links: Pending</p>
+                </div>
+                <!-- Placeholder artist card -->
+                <div class="artist-card" onclick="showArtistDetails('artist3')">
+                    <h3>Artist Name 3</h3>
+                    <p>Genre: Pending</p>
+                    <p>Social Media: Pending</p>
+                    <p>Music Links: Pending</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 Musical LOCA. All rights reserved.</p>
+    </footer>
+    <!-- Add your JavaScript files at the end of the body to ensure proper loading -->
+    <script src="main.js"></script>
+</body>
+</html>

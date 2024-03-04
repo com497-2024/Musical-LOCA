@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical LOCA - AI Assistant</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        nav ul {
+            list-style-type: none;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        main h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .external-link {
+            display: block;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #333;
+            text-decoration: none;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #aedcff; /* Baby Blue */
+            border-radius: 8px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            flex: 0 0 100%;
+        }
+
+        .option h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #333;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Musical LOCA</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">AI Assistant</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>AI Assistant</h2>
+        <a href="https://theselyricsdonotexist.com/" class="external-link" target="_blank">Generate Original Song Lyrics</a>
+        <div class="options">
+            <div class="option">
+                <h3>Song Ideas</h3>
+                <p>Type here to generate song ideas:</p>
+                <textarea id="beats-input"></textarea>
+                <button onclick="generateBeats()">Generate Song Ideas</button>
+                <div id="beats-output"></div>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">Back to Home</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Musical LOCA. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
