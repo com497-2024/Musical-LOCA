@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends Page - Musical LOCA</title>
+    <!-- Add your stylesheets and other dependencies here -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #e1f0ff; /* Light blue background for the entire page */
+            margin: 0; /* Remove default margin for body */
+            font-family: Arial, sans-serif; /* Set a default font */
+        }
+
+        /* Header styling */
+        header {
+            background-color: #3498db; /* Blue background for the header */
+            color: white; /* White text color for the header */
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Search bar styling */
+        .search-bar {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .search-bar button {
+            background-color: #3498db; /* Blue button color */
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Main content styling */
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        /* Chat container styling */
+        .chat-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Friends Online Section styling */
+        .friends-online {
+            flex: 1;
+            background-color: #ffffff; /* White background for the friends online section */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        /* Messages Section styling */
+        .messages-section {
+            flex: 2;
+            background-color: #ffffff; /* White background for the messages section */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        /* Message styling */
+        .message {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        /* Message options styling */
+        .message-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <h1>Musical LOCA - Friends</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Search for users">
+            <button onclick="searchUsers()">Search</button>
+        </div>
+        <!-- Add navigation links if needed -->
+    </header>
+    <!-- Main content section -->
+    <main>
+        <div class="chat-container">
+            <!-- Friends Online Section -->
+            <div class="friends-online">
+                <h2>Friends Online</h2>
+                <!-- Display friends online -->
+                <ul>
+                    <li>Friend 1</li>
+                    <li>Friend 2</li>
+                    <li>Friend 3</li>
+                    <!-- Add more friends online -->
+                </ul>
+            </div>
+            <!-- Messages Section -->
+            <div class="messages-section">
+                <h2>Messages</h2>
+                <!-- Display messages with selected friend -->
+                <div class="message">
+                    <p>Friend 1: Hey, how are you?</p>
+                    <div class="message-options">
+                        <button>Delete</button>
+                        <button>Pin</button>
+                        <button>Poke</button>
+                    </div>
+                </div>
+                <div class="message">
+                    <p>You: Hi! I'm doing great, thanks for asking.</p>
+                    <div class="message-options">
+                        <button>Delete</button>
+                        <button>Pin</button>
+                        <button>Poke</button>
+                    </div>
+                </div>
+                <!-- Add more messages -->
+                <!-- Direct Message Form -->
+                <form>
+                    <h3>Direct Message</h3>
+                    <label for="recipient">To:</label>
+                    <select name="recipient" id="recipient">
+                        <option value="friend1">Friend 1</option>
+                        <option value="friend2">Friend 2</option>
+                        <option value="friend3">Friend 3</option>
+                        <!-- Add more friends -->
+                    </select>
+                    <label for="message">Message:</label>
+                    <textarea name="message" id="message" rows="4" cols="50"></textarea>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 Musical LOCA. All rights reserved.</p>
+    </footer>
+    <!-- Add your JavaScript files at the end of the body to ensure proper loading -->
+    <script src="main.js"></script>
+</body>
+</html>
