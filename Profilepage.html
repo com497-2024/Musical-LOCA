@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="Profilepage.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 5px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+            .profile-picture img {
+                width: auto;
+                height: 100%;
+            }
+
+        .profile-info, form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        label, input, button, textarea {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        input, textarea {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+            .top-right img {
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+            }
+
+        .content-section {
+            margin-top: 20px;
+        }
+
+        .post-item, .event-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+            .event-item img, .post-item img {
+                max-width: 200px;
+                margin-top: 10px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-right">
+            <img src="home-icon.png" alt="Home" onclick="window.location.href='homepage.html'">
+        </div>
+        <div id="notificationArea" style="display: none;">
+            <p id="notificationMessage"></p>
+            <button onclick="document.getElementById('updateInfoForm').style.display='block'">Update Info</button>
+        </div>
+        <div id="profilePictureContainer" class="profile-picture">
+            <!-- Profile picture will be updated dynamically -->
+        </div>
+        <div class="profile-info">
+            <p>Username: <span id="username">Loading...</span></p>
+            <p>Bio: <span id="bio">Loading...</span></p>
+            <p>Zip Code: <span id="zipCode">Loading...</span></p>
+        </div>
+        <div id="updateInfoForm">
+            <label for="updateZipCode">New Zip Code:</label>
+            <input type="text" id="updateZipCode" name="zip_code"><br>
+            <label for="updateProfilePicture">New Profile Picture:</label>
+            <input type="file" id="updateProfilePicture" name="profilePicture"><br>
+            <button type="button" onclick="updateProfile()">Submit</button>
+            <button type="button" onclick="document.getElementById('updateInfoForm').style.display='none'">Cancel</button>
+        </div>
+
+        <!-- Form for creating a post -->
+        <form id="postForm">
+            <h3>Create a Post</h3>
+            <textarea name="content" placeholder="What's on your mind?"></textarea>
+            <input type="file" name="image" accept="image/*">
+            <button type="submit">Post</button>
+        </form>
+
+        <!-- Form for creating an event -->
+        <form id="eventForm">
+            <h3>Create an Event</h3>
+            <input type="text" name="title" placeholder="Event Title" required>
+            <textarea name="description" placeholder="Event Description" required></textarea>
+            <input type="date" name="event_date" required>
+            <input type="file" name="image" accept="image/*">
+            <button type="submit">Create Event</button>
+        </form>
+
+        <!-- Placeholder for displaying posts and events -->
+        <div class="content-section">
+            <h3>Posts</h3>
+            <div id="postsContainer"></div>
+        </div>
+        <div class="content-section">
+            <h3>Events</h3>
+            <div id="eventsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchUserData();
+            loadPosts();
+            loadEvents();
+        });
+
+        document.getElementById('postForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/createPost', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadPosts(); // Reload posts after posting
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('eventForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/createEvent', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadEvents(); // Reload events after posting
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function fetchUserData() {
+            fetch('/getUserData')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('username').textContent = data.username || 'Not found';
+                    document.getElementById('bio').textContent = data.bio || 'Not found';
+                    document.getElementById('zipCode').textContent = data.zip_code || 'Not found';
+
+                    if (!data.zip_code || !data.profile_pic_path) {
+                        document.getElementById('notificationArea').style.display = 'block';
+                        document.getElementById('notificationMessage').textContent = 'Please complete your profile information.';
+                    }
+
+                    if (data.profile_pic_path) {
+                        const img = document.createElement('img');
+                        img.src = data.profile_pic_path;
+                        img.alt = 'Profile Picture';
+                        document.getElementById('profilePictureContainer').appendChild(img);
+                    } else {
+                        document.getElementById('profilePictureContainer').textContent = 'No profile picture';
+                    }
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+        }
+
+        function loadPosts() {
+            fetch('/getPosts')
+                .then(response => response.json())
+                .then(posts => {
+                    const postsContainer = document.getElementById('postsContainer');
+                    postsContainer.innerHTML = '';
+                    posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'post-item';
+                        postElement.innerHTML = `<strong>Post:</strong> ${post.content}` + (post.image_path ? `<br><img src="${post.image_path}" alt="Post Image">` : '');
+                        postsContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error('Error loading posts:', error));
+        }
+
+        function loadEvents() {
+            fetch('/getEvents')
+                .then(response => response.json())
+                .then(events => {
+                    const eventsContainer = document.getElementById('eventsContainer');
+                    eventsContainer.innerHTML = '';
+                    events.forEach(event => {
+                        const eventElement = document.createElement('div');
+                        eventElement.className = 'event-item';
+                        eventElement.innerHTML = `<strong>Event:</strong> ${event.title} - ${event.description}` + (event.image_path ? `<br><img src="${event.image_path}" alt="Event Image">` : '') + `<br><em>Date: ${new Date(event.event_date).toDateString()}</em>`;
+                        eventsContainer.appendChild(eventElement);
+                    });
+                })
+                .catch(error => console.error('Error loading events:', error));
+        }
+    </script>
+</body>
+</html>
+
