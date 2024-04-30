@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical LOCA</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .card {
+            width: 300px;
+            padding: 20px;
+            margin: 10px;
+            border: 1px solid #555;
+            border-radius: 10px;
+            background-color: #222;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .user-info img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+            }
+
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        h1, h2, h3 {
+            font-size: 2.5rem;
+            color: #FFA500;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        footer {
+            background-color: #222;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #FFA500;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .logout-button,
+        .profile-button {
+            background-color: #FFA500;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: absolute;
+            top: 20px;
+        }
+
+            .logout-button:hover,
+            .profile-button:hover {
+                background-color: #FFD700;
+            }
+
+        .profile-button {
+            right: 20px;
+        }
+
+        .logout-button {
+            right: 140px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Musical LOCA</h1>
+        <div class="local-music-tabs">
+            <button class="tablink" onclick="window.location.href='friends.html'">Musical Friend Zone</button>
+            <button class="tablink" onclick="window.location.href='AIAssist (1).html'">AI Assistant</button>
+        </div>
+        <!-- Profile and Logout Buttons -->
+        <button class="profile-button" onclick="window.location.href='Profilepage.html'">Profile</button>
+        <button class="logout-button" onclick="logout()">Logout</button>
+    </header>
+    <main>
+        <section id="upcoming-events">
+            <h2>Upcoming Events</h2>
+            <div class="container" id="events-container"></div>
+        </section>
+        <section id="recent-posts">
+            <h2>Recent Posts</h2>
+            <div class="container" id="posts-container"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Musical LOCA. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            loadPosts();
+            loadEvents();
+        });
+
+        function loadPosts() {
+            fetch('/getPosts')
+                .then(response => response.json())
+                .then(posts => {
+                    const postsContainer = document.getElementById('posts-container');
+                    postsContainer.innerHTML = '';
+                    posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'post-card';
+                        postElement.innerHTML = `
+                    <img src="${post.image_path || 'default_post.png'}" alt="Post Image" style="height: 200px;">
+                    <div>
+                        <img src="${post.profile_pic_path || 'default_profile.jpg'}" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%;">
+                        <p>${post.username}</p>
+                        <p>${new Date(post.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <p>${post.content}</p>
+                `;
+                        postsContainer.appendChild(postElement);
+                    });
+                })
+                .catch(error => console.error('Error loading posts:', error));
+        }
+
+        function loadEvents() {
+            fetch('/getEvents')
+                .then(response => response.json())
+                .then(events => {
+                    const eventsContainer = document.getElementById('events-container');
+                    eventsContainer.innerHTML = '';
+                    events.forEach(event => {
+                        const eventElement = document.createElement('div');
+                        eventElement.className = 'card';
+                        eventElement.innerHTML = `
+                            <img src="${event.image_path || 'default_event.png'}" alt="Event Image" style="height: 200px;">
+                            <div class="user-info">
+                                <img src="${event.profile_pic_path || 'default_profile.jpg'}" alt="${event.username}" style="width: 50px; height: 50px; border-radius: 50%;">
+                                <p>${event.username}</p>
+                                <p>${new Date(event.event_date).toLocaleDateString()}</p>
+                            </div>
+                            <p>${event.description}</p>
+                        `;
+                        eventsContainer.appendChild(eventElement);
+                    });
+                })
+                .catch(error => console.error('Error loading events:', error));
+        }
+
+        // Function to handle logout
+        function logout() {
+            // Redirect to Login.html
+            window.location.href = 'Login.html';
+            // Additional actions for logout can be added here
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,299 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="Profilepage.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50; /* Dark blue background */
+            color: #FFA500; /* White text */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* White background with transparency */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #2c3e50; /* Turquoise background */
+            margin: 20px auto; /* Center horizontally */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 5px solid #fff; /* White border */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+            .profile-picture img {
+                width: auto;
+                height: 100%;
+            }
+
+        .profile-info, form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        label, input, button, textarea {
+            display: block;
+            width: calc(100% - 20px); /* Adjusted width to account for padding */
+            margin: 10px auto; /* Centered horizontally */
+        }
+
+        input, textarea {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3498db; /* Blue border */
+            box-sizing: border-box;
+            color: #FFA500; /* Dark text color */
+            background-color: #ecf0f1; /* Light gray background */
+        }
+
+        button {
+            background-color: #e74c3c; /* Red background */
+            color: #fff; /* White text */
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            button:hover {
+                background-color: #c0392b; /* Darker red on hover */
+            }
+
+        .top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+            .top-right img {
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                border-radius: 50%; /* Rounded profile picture icon */
+                transition: transform 0.3s ease;
+            }
+
+                .top-right img:hover {
+                    transform: rotate(360deg); /* Spin effect on hover */
+                }
+
+        .content-section {
+            margin-top: 30px;
+        }
+
+        .post-item, .event-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #34495e; /* Dark gray background */
+        }
+
+            .post-item img, .event-item img {
+                max-width: 100%;
+                border-radius: 8px;
+                margin-top: 15px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-right">
+            <img src="home-icon.png" alt="Home" onclick="window.location.href='homepage.html'">
+        </div>
+        <div id="notificationArea" style="display: none;">
+            <p id="notificationMessage"></p>
+            <button onclick="document.getElementById('updateInfoForm').style.display='block'">Update Info</button>
+        </div>
+        <div id="profilePictureContainer" class="profile-picture">
+            <!-- Profile picture will be updated dynamically -->
+        </div>
+        <div class="profile-info">
+            <p>Username: <span id="username">Loading...</span></p>
+            <p>Bio: <span id="bio">Loading...</span></p>
+            <p>Zip Code: <span id="zipCode">Loading...</span></p>
+        </div>
+        <div id="updateInfoForm" style="display: none;">
+            <form id="profileUpdateForm">
+                <label for="updateZipCode">New Zip Code:</label>
+                <input type="text" id="updateZipCode" name="zip_code"><br>
+                <label for="updateProfilePicture">New Profile Picture:</label>
+                <input type="file" id="updateProfilePicture" name="profilePicture"><br>
+                <button type="button" onclick="updateProfile()">Submit</button>
+                <button type="button" onclick="document.getElementById('updateInfoForm').style.display='none'">Cancel</button>
+            </form>
+        </div>
+
+        <!-- Form for creating a post -->
+        <form id="postForm">
+            <h3>Create a Post</h3>
+            <textarea name="content" placeholder="What's on your mind?"></textarea>
+            <input type="file" name="image" accept="image/*">
+            <button type="submit">Post</button>
+        </form>
+
+        <!-- Form for creating an event -->
+        <form id="eventForm">
+            <h3>Create an Event</h3>
+            <input type="text" name="title" placeholder="Event Title" required>
+            <textarea name="description" placeholder="Event Description" required></textarea>
+            <input type="date" name="event_date" required>
+            <input type="file" name="image" accept="image/*">
+            <button type="submit">Create Event</button>
+        </form>
+
+        <!-- Placeholder for displaying posts and events -->
+        <div class="content-section">
+            <h3>Posts</h3>
+            <div id="postsContainer"></div>
+        </div>
+        <div class="content-section">
+            <h3>Events</h3>
+            <div id="eventsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchUserData();
+            loadPosts();
+            loadEvents();
+        });
+
+        document.getElementById('postForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/createPost', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadPosts(); // Reload posts after posting
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('eventForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/createEvent', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadEvents(); // Reload events after posting
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function fetchUserData() {
+            fetch('/getUserData')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('username').textContent = data.username || 'Not found';
+                    document.getElementById('bio').textContent = data.bio || 'Not found';
+                    document.getElementById('zipCode').textContent = data.zip_code || 'Not found';
+
+                    if (!data.zip_code || !data.profile_pic_path) {
+                        document.getElementById('notificationArea').style.display = 'block';
+                        document.getElementById('notificationMessage').textContent = 'Please complete your profile information.';
+                    }
+
+                    if (data.profile_pic_path) {
+                        const img = document.createElement('img');
+                        img.src = data.profile_pic_path;
+                        img.alt = 'Profile Picture';
+                        document.getElementById('profilePictureContainer').appendChild(img);
+                    } else {
+                        document.getElementById('profilePictureContainer').textContent = 'No profile picture';
+                    }
+                })
+                .catch(error => console.error('Error fetching user data:', error));
+        }
+
+        function updateProfile() {
+            const updateZipCode = document.getElementById('updateZipCode').value;
+            const updateProfilePicture = document.getElementById('updateProfilePicture').files[0];
+            const formData = new FormData();
+            formData.append('zip_code', updateZipCode);
+            if (updateProfilePicture) {
+                formData.append('profilePicture', updateProfilePicture);
+            }
+
+            fetch('/updateProfile', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Profile Updated Successfully!');
+                    fetchUserData();  // Re-fetch user data to update the page
+                })
+                .catch(error => console.error('Error updating profile:', error));
+        }
+
+        function loadPosts() {
+            fetch('/getMyPosts')
+                .then(response => response.json())
+                .then(posts => {
+                    const postsContainer = document.getElementById('postsContainer');
+                    postsContainer.innerHTML = '';
+                    if (posts.length === 0) {
+                        postsContainer.innerHTML = '<p>No posts to show.</p>';
+                    } else {
+                        posts.forEach(post => {
+                            const postElement = document.createElement('div');
+                            postElement.className = 'post-item';
+                            postElement.innerHTML = `<strong>Post:</strong> ${post.content}` + (post.image_path ? `<br><img src="${post.image_path}" alt="Post Image">` : '');
+                            postsContainer.appendChild(postElement);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading posts:', error));
+        }
+
+        function loadEvents() {
+            fetch('/getMyEvents')
+                .then(response => response.json())
+                .then(events => {
+                    const eventsContainer = document.getElementById('eventsContainer');
+                    eventsContainer.innerHTML = '';
+                    if (events.length === 0) {
+                        eventsContainer.innerHTML = '<p>No events to show.</p>';
+                    } else {
+                        events.forEach(event => {
+                            const eventElement = document.createElement('div');
+                            eventElement.className = 'event-item';
+                            eventElement.innerHTML = `<strong>Event:</strong> ${event.title} - ${event.description}` + (event.image_path ? `<br><img src="${event.image_path}" alt="Event Image">` : '') + `<br><em>Date: ${new Date(event.event_date).toDateString()}</em>`;
+                            eventsContainer.appendChild(eventElement);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading events:', error));
+        }
+    </script>
+</body>
+</html>
+
+
+

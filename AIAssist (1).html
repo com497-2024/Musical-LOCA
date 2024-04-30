@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical LOCA - AI Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50; /* Same color theme as friends.html */
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: #FFA500; /* A vibrant color for the header */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            nav a {
+                color: #FFA500; /* Matching the header color */
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                background-color: #444;
+                transition: background-color 0.3s;
+            }
+
+                nav a:hover {
+                    background-color: #666;
+                }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1); /* Same as friends.html */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            main h2 {
+                font-size: 28px;
+                margin-bottom: 20px;
+                text-align: center;
+                color: #fff; /* Matching the body text color */
+            }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #3498db; /* Matching the link color in friends.html */
+            border-radius: 5px;
+            resize: none;
+            font-family: 'Roboto', sans-serif;
+            background-color: #fff; /* Matching the body background color */
+            color: #FFA500; /* Matching the body text color */
+        }
+
+        button {
+            background-color: #FFA500; /* Matching the header color */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #FFD700;
+            }
+
+        #lyrics-output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #FFA500;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #222;
+            color: #fff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Musical LOCA - AI Assistant</h1>
+    </header>
+    <nav>
+        <a href="homepage.html">Home</a> <!-- Modified link to homepage.html -->
+    </nav>
+    <main>
+        <h2>Generate Lyrics with AI</h2>
+        <div>
+            <p>Enter your song idea:</p>
+            <textarea id="song-idea" placeholder="Type your song idea here..."></textarea>
+            <button onclick="generateLyrics()">Generate Lyrics</button>
+        </div>
+        <div id="lyrics-output"></div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Musical LOCA. All rights reserved.</p>
+    </footer>
+    <script>
+        function generateLyrics() {
+            var songIdea = document.getElementById("song-idea").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://127.0.0.1:5000/generate_lyrics", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        document.getElementById("lyrics-output").innerText = response.lyrics;
+                    } else {
+                        console.error("Failed to generate lyrics. Status code: " + xhr.status);
+                    }
+                }
+            };
+            xhr.send(JSON.stringify({ topic: songIdea }));
+        }
+    </script>
+</body>
+</html>
